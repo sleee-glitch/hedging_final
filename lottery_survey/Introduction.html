@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% block title %} Your task: {% endblock %}
+{% block content %}
+
+<div class="container">
+    <p style="font-size: 1.25rem; line-height: 1.5;">In this study, you will choose how to allocate $1 between two investment options: <strong>Investment 1</strong> and <strong>Investment 2</strong>.</p>
+
+    <ul style="font-size: 1.25rem; line-height: 1.5;">
+        <li> Each investment has two different outcomes under two <strong>Possibilities</strong>: <strong>Possibility A</strong> and <strong>Possibility B</strong>.</li>
+        <ul>
+            <li>Under <strong>Possibility A</strong>: Investment 1 results in a gain while Investment 2 results in a loss.</li>
+            <li>Under <strong>Possibility B</strong>: Investment 1 results in a loss while Investment 2 results in a gain.</li>
+        </ul>
+
+<li>Your task is to decide how to allocate your money between these two investments, considering both the <strong>chances of each Possibility</strong> and the <strong>outcomes of each investment</strong>.</li>
+        <li>You will complete 45 independent rounds of this task. Each round is separate, and decisions in one round do not affect other rounds.</li>
+      </ul>
+
+    {% next_button %}
+</div>
+
+{% endblock %}

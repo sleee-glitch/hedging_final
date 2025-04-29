@@ -1,0 +1,123 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Example 2: Two Investment options
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Initial instructions -->
+
+<ul style="font-size: 1.25rem; line-height: 1.5;">
+
+
+    <li> There are two investment options: <strong>Investment 1</strong> and <strong>Investment 2 </strong>.</li>
+<li> Under each Possibility, <strong> these two investments have the opposite outcomes.</strong> When one investment yields a loss, the other yields a gain. </li>
+
+<div style="border: 2px solid black; padding: 10px; margin-top: 10px; border-radius: 5px;">
+<div class="row justify-content-center">
+    <div class="col-6 text-center">
+        <img src="{% static 'images/investment1.png' %}"
+             alt="Investment 1"
+             class="img-fluid"
+             style="max-width: 90%; height: auto; max-height: 250px;">
+    </div>
+
+    <div class="col-6 text-center">
+        <img src="{% static 'images/investment2.png' %}"
+             alt="Investment 2"
+             class="img-fluid"
+             style="max-width: 90%; height: auto; max-height: 250px;">
+    </div>
+</div>
+<!-- Boxed Example -->
+
+    <ul>
+ In this example,
+        <li>If <strong>Possibility A</strong> occurs, Investment 1 results in -$3, while Investment 2 yields $5.</li>
+        <li>If <strong>Possibility B</strong> occurs, Investment 1 results in $2, while Investment 2 yields -$5.</li>
+    </ul>
+</div>
+
+
+
+
+    <div class="row justify-content-between mt-4">
+
+        <div class="col-md-6 text-left">
+            {% next_button %}
+        </div>
+    </div>
+
+
+
+
+<script>
+function updateAlphaFromSlider(value) {
+    // Reverse the value (1 - value) to make slider work in opposite direction
+    const reversedValue = (1 - parseFloat(value) + 0.01).toFixed(2);
+    // Update the form control input with the reversed value
+    document.getElementById('alpha_input').value = reversedValue;
+    // Update the hidden input
+    document.getElementById('id_alpha').value = reversedValue;
+}
+
+function validateAlpha() {
+    const input = document.getElementById('alpha_input');
+    const value = parseFloat(input.value);
+    const errorMessage = document.getElementById('error_message');
+
+    if (isNaN(value) || value < 0.01 || value > 1) {
+        errorMessage.textContent = 'Please enter a value between 0.01 and 1';
+        errorMessage.style.display = 'block';
+        return false;
+    }
+
+    errorMessage.style.display = 'none';
+    // Reverse the value for the slider
+    document.getElementById('alpha_slider').value = (1 - value + 0.01).toFixed(2);
+    document.getElementById('id_alpha').value = value;
+    return true;
+}
+
+// Initialize with a default value when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const defaultValue = 0.5;
+    document.getElementById('alpha_slider').value = 1 - defaultValue + 0.01;
+    document.getElementById('alpha_input').value = defaultValue;
+    document.getElementById('id_alpha').value = defaultValue;
+});
+</script>
+
+<style>
+    canvas {
+        max-width: 20%;
+        height: auto !important;
+    }
+
+    .form-control {
+        width: 20%;
+    }
+</style>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener to the back button
+            var backButton = document.querySelector('.otree-btn-previous');
+            if (backButton) {
+                backButton.addEventListener('click', function() {
+                    window.history.back();
+                });
+            }
+        });
+    </script>
+    <style>
+        .otree-btn-previous {
+            margin-right: 10px;
+        }
+    </style>
+</div>
+{% endblock %}

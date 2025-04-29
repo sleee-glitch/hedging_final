@@ -1,0 +1,186 @@
+{% extends "global/Page.html" %}
+{% load custom_filters %}
+{% load otree static %}
+
+{% block title %}
+    Certainty Question - Round {{ round_number }} of {{ num_rounds }}
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row justify-content-center mb-4">
+
+            <div class="alert alert-purple" style="background-color: #e6e6fa; border: 1px solid #d8d8f0; border-radius: 5px; padding: 15px;">
+            <h5 class="mb-3"> In this round,</h5>
+
+                  <p>With <strong>{{ p }} out of 100 cases </strong>:
+    Investment 1 yields {{ x1_l_formatted }}, while Investment 2 yields {{ x2_h_formatted }}.
+</p>
+<p>With <strong>{{ one_minus_p }} out of 100 cases</strong>:
+    Investment 1 yields {{ x1_h_formatted }}, while Investment 2 yields {{ x2_l_formatted }}.
+</p>
+<p>Your decision on the previous screen indicates that your allocation was:</p>
+<ul style="list-style-type: disc;">
+    <li>Investment 1: <strong>{{ player_alpha_formatted }}</strong></li>
+    <li>Investment 2: <strong>{{ investment_2_amount_formatted }}</strong></li>
+</ul>
+</div>
+
+
+
+<p style="text-align: center;">
+<strong>How certain</strong> are you that allocating approximately <strong>${{ player.alpha }}</strong> to Investment 1 is your best decision, given your preferences?</p>
+
+
+                    <div class="form-group">
+                        <label for="certainty_slider" style="font-size: 1em; display: block; margin-bottom: 10px;">
+
+                        </label>
+
+                        <!-- Hidden input to store the selected certainty value -->
+                        <input type="hidden" id="certainty_input" name="certainty" value="">
+
+                        <!-- Slider for certainty selection -->
+                        <div class="slider-container">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+    <strong>Very uncertain</strong>
+    <strong>Completely certain</strong>
+</div>
+
+<div class="position-relative mb-2">
+    <input type="range" class="form-range no-default" id="certainty_slider" min="0" max="100" step="1" style="width: 100%;">
+    <div class="d-flex justify-content-between px-2 mt-1">
+        <span>0%</span>
+        <span>25%</span>
+        <span>50%</span>
+        <span>75%</span>
+        <span>100%</span>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end align-items-center">
+    <input type="text" id="certainty_value" class="form-control" style="width: 60px; text-align: center;" readonly>
+    <span class="ms-1">%</span>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-12 text-center">
+            {% next_button %}
+        </div>
+    </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const slider = document.getElementById('certainty_slider');
+        const certaintyInput = document.getElementById('certainty_input');
+        const certaintyValue = document.getElementById('certainty_value');
+        const nextButton = document.querySelector('.otree-btn-next');
+
+        // Set initial blank values
+        slider.value = "";
+        certaintyInput.value = "";
+        certaintyValue.value = "";
+
+        // Disable next button initially
+        if (nextButton) {
+            nextButton.disabled = true;
+        }
+
+        // Update the hidden input and displayed value when the slider moves
+        slider.addEventListener('input', function() {
+            slider.classList.remove("no-default");
+            slider.classList.add("active");
+
+            certaintyInput.value = slider.value;
+            certaintyValue.value = slider.value;
+
+            // Enable next button when slider is used
+            if (nextButton) {
+                nextButton.disabled = false;
+            }
+        });
+    });
+</script>
+
+
+<!-- Custom CSS to style the slider -->
+<style>
+    .slider-container {
+        margin: 20px 10px;
+    }
+
+    /* Hide the slider thumb initially */
+    input[type=range].no-default::-webkit-slider-thumb {
+        visibility: hidden;
+    }
+    input[type=range].no-default::-moz-range-thumb {
+        visibility: hidden;
+    }
+    input[type=range].no-default::-ms-thumb {
+        visibility: hidden;
+    }
+
+    input[type=range].no-default::-webkit-slider-runnable-track {
+        background: lightgray;
+    }
+
+    /* Show the thumb when active class is added */
+    input[type=range].active::-webkit-slider-thumb,
+    input[type=range].active::-moz-range-thumb,
+    input[type=range].active::-ms-thumb {
+        visibility: visible;
+    }
+
+    /* Style for the slider thumb */
+    .form-range::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #0d6efd;
+        cursor: pointer;
+    }
+
+    .form-range::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #0d6efd;
+        cursor: pointer;
+    }
+
+    .form-range::-webkit-slider-runnable-track {
+        height: 4px;
+        background: #ddd;
+        border-radius: 2px;
+    }
+
+    .tick-marks span {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .tick-labels {
+        font-size: 12px;
+        color: #666;
+        margin-top: -5px;
+    }
+
+    .tick-labels span {
+        width: 30px;
+        text-align: center;
+    }
+</style>
+
+{% endblock %}

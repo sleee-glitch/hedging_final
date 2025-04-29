@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Your certainty:
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <ul style="font-size: 1.25rem; line-height: 1.5;">
+
+        <li> In each round, after you allocate $1 between two investments, we will ask you <strong>how certain</strong> you are about your decision.</li>
+        <li> Specifically, we are interested in how likely you think it is (in percentage terms) that the decision you made is actually your best decision, given your personal preferences.</li>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            {% next_button %}
+        </div>
+    </div>
+
+
+
+{% endblock %}

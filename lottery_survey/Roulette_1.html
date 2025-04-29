@@ -1,0 +1,329 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Roulette For Final Payment
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- First Row: Round Selection and Wheel of Events -->
+    <div class="row justify-content-center mb-4">
+        <!-- Round Selection -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Round Selection</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div id="roundSelector" style="font-size: 48px; text-align: center; margin: 20px 0;">1</div>
+                    <div id="roundDetails" style="display: none;">
+                        <p class="mb-1">Selected round: <span id="selectedRound">{{ selected_round }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wheel of Events - Made smaller to match round selection box -->
+        <div class="col-md-5">
+            <div class="card" id="spinnerSection" style="display: none;">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Spin the Wheel</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div style="height: 200px; width: 100%; position: relative;">
+                        <!-- Wheel pointer/indicator -->
+                        <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 10;">
+                            <div style="width: 0; height: 0;
+                                        border-left: 15px solid transparent;
+                                        border-right: 15px solid transparent;
+                                        border-top: 30px solid black;"></div>
+                        </div>
+                        <canvas id="probability_pie"></canvas>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button id="spinButton" class="btn btn-primary">Click to Spin the Wheel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row: Lottery and Choice -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-10">
+            <div class="card" id="lotterySection" style="display: none;">
+                <div class="card-header bg-info text-white">
+
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                         <li><strong>Possibility A ({{ p }}% chance):</strong> Investment 1 yields {{ x1_l }}, Investment 2 yields {{ x2_h }}</li>
+                        <li><strong>Possibility B ({{ one_minus_p }}% chance):</strong> Investment 1 yields {{ x1_h }}, Investment 2 yields {{ x2_l }}</li>
+                        <li>Your allocation in the Investments: ${{ alpha }} to Investment 1 and {{ one_minus_alpha }} to Investment 2</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Third Row: Payout Result -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-10">
+            <div class="card" id="payoutSection" style="display: none;">
+                <div class="card-header bg-warning text-dark">
+                </div>
+                <div class="card-body text-center">
+                    <h3 id="resultHeader" style="display: none;"></h3>
+                    <div id="expectedValue" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Section -->
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6 text-center">
+        <h4>Please raise your hand now and wait for the experimenter.</h4>
+        <input type="text" id="validationInput" class="form-control w-50 mx-auto mb-3" placeholder="Enter code from experimenter" oninput="checkInput()">
+        <div id="nextButtonContainer" style="display: none;">
+            {% next_button %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script>
+        function checkInput() {
+        const input = document.getElementById("validationInput").value.trim();
+        const buttonContainer = document.getElementById("nextButtonContainer");
+        if (input.length > 0) {
+            buttonContainer.style.display = "block";
+        } else {
+            buttonContainer.style.display = "none";
+        }
+    }
+    Chart.register(ChartDataLabels);
+    var softBlue = '#4682B4';
+    var mutedOrange = '#D2691E';
+    var pieChart;
+    var spinInProgress = false;
+    var spinResult = null;
+
+    function animateRoundSelection() {
+        const totalRounds = {{ Constants.num_rounds }};
+        const selectedRound = {{ selected_round }};
+        let currentRound = 1;
+        const roundSelector = document.getElementById('roundSelector');
+        const roundDetails = document.getElementById('roundDetails');
+        const spinnerSection = document.getElementById('spinnerSection');
+        const lotterySection = document.getElementById('lotterySection');
+
+        function updateRound() {
+            if (currentRound <= totalRounds) {
+                roundSelector.textContent = currentRound;
+                currentRound++;
+                setTimeout(updateRound, 50);
+            } else {
+                setTimeout(() => {
+                    roundSelector.textContent = selectedRound;
+                    roundDetails.style.display = 'block';
+                    spinnerSection.style.display = 'block';
+                    lotterySection.style.display = 'block';
+                    initializePieChart();
+                }, 500);  // Wait 500ms before showing the final result
+            }
+        }
+
+        updateRound();
+    }
+
+    function initializePieChart() {
+        const ctx = document.getElementById('probability_pie').getContext('2d');
+
+        pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Possibility B', 'Possibility A'],
+                datasets: [{
+                    data: [{{ one_minus_p }}, {{ p }}],
+                    backgroundColor: [mutedOrange, softBlue],
+                    borderWidth: 1,
+                    borderColor: '#000'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: false,
+                        font: { size: 14 }
+                    },
+                    legend: { display: false },
+                    datalabels: {
+                        color: '#fff',
+                        font: { weight: 'bold', size: 12 },
+                        formatter: function(value, context) {
+                            return context.chart.data.labels[context.dataIndex] + ': ' + Math.round(value) + '%';
+                        }
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                animation: {
+                    duration: 0
+                },
+                layout: {
+                    padding: {
+                        top: 20
+                    }
+                }
+            }
+        });
+    }
+
+    function spinWheel() {
+        if (spinInProgress) return;
+
+        spinInProgress = true;
+        const spinButton = document.getElementById('spinButton');
+        spinButton.disabled = true;
+        spinButton.textContent = 'Spinning...';
+
+        // Determine the outcome based on probabilities
+        const p = {{ p }};
+        const randomValue = Math.random() * 100;
+        spinResult = randomValue <= p ? 'p' : 'one_minus_p';
+
+        // Rotation logic
+        let rotations = 3; // Reduced base rotations for faster spinning
+ let degreeOffset = spinResult === 'p' ?
+    (Math.random() * ({{ p }} / 2) + ({{ p }} / 4)) :
+    (Math.random() * ({{ one_minus_p }} / 2) + {{ p }} + ({{ one_minus_p }} / 4));
+
+
+        // Convert to degrees (full circle = 360 degrees)
+        const totalDegrees = (rotations * 360) + (degreeOffset * 3.6);
+        let currentRotation = 1;
+        const step = 15; // Increased step for faster rotation
+        const initialSpeed = 15; // Faster initial speed (lower milliseconds)
+        let speed = initialSpeed;
+        const acceleration = 1.03; // Steeper slowdown factor
+
+        // Update chart rotation
+        function rotateChart() {
+            if (currentRotation < totalDegrees) {
+                currentRotation += step;
+
+                // spin speed
+                pieChart.options.rotation = currentRotation * Math.PI / 10;
+                pieChart.update();
+
+                // Slow down gradually
+                speed *= acceleration;
+
+                setTimeout(rotateChart, speed);
+            } else {
+                // Spinning complete
+                spinInProgress = false;
+                spinButton.textContent = 'Spin Complete!';
+
+                // Show payout section
+                document.getElementById('payoutSection').style.display = 'block';
+
+                // Calculate and display the result
+                calculateResult();
+            }
+        }
+
+        // Start rotation
+        rotateChart();
+    }
+
+    function calculateResult() {
+        const resultHeader = document.getElementById('resultHeader');
+        const expectedValue = document.getElementById('expectedValue');
+
+        const p = {{ p }};
+        const x1_l = {{ x1_l }};
+        const x1_h = {{ x1_h }};
+        const x2_l = {{ x2_l }};
+        const x2_h = {{ x2_h }};
+        const alpha = {{ alpha }};
+        const one_minus_alpha = {{ one_minus_alpha }};
+
+        let totalExpectedValue;
+        let calculation = "";
+
+        if (spinResult === 'p') {
+            // If spinner landed on p (Possibility A)
+            totalExpectedValue = (alpha * x1_l + one_minus_alpha * x2_h);
+            resultHeader.innerHTML = "<strong>The wheel landed on Possibility A ({{ p }}%):</strong>";
+          //calculation = `(${alpha} × ${x1_l}) + (${one_minus_alpha} × ${x2_h}) = ${totalExpectedValue.toFixed(2)}`;
+        } else {
+            // If spinner landed on one_minus_p (Possibility B)
+            totalExpectedValue = (alpha * x1_h + one_minus_alpha * x2_l);
+            resultHeader.innerHTML = "<strong>The wheel landed on Possibility B ({{ one_minus_p }}%):</strong>";
+            //calculation = `(${alpha} × ${x1_h}) + (${one_minus_alpha} × ${x2_l}) = ${totalExpectedValue.toFixed(2)}`;
+        }
+
+        resultHeader.style.display = 'block';
+        expectedValue.style.display = 'block';
+
+        let resultMessage = "";
+        if (totalExpectedValue > 0) {
+            resultMessage = `<div class="alert alert-success">
+                <h4>Congratulations! Your additional earnings are: <strong>$${totalExpectedValue.toFixed(2)}</strong></h4>
+
+            </div>`;
+        } else if (totalExpectedValue < 0) {
+            resultMessage = `<div class="alert alert-danger">
+                <h4>Unfortunately, you have incurred a loss. Your earnings change: <strong>$${totalExpectedValue.toFixed(2)}</strong></h4>
+
+            </div>`;
+        } else {
+            resultMessage = `<div class="alert alert-info">
+                <h4>Your earnings remain unchanged: <strong>$${totalExpectedValue.toFixed(2)}</strong></h4>
+                <p class="mb-0"><small>Calculation: ${calculation}</small></p>
+            </div>`;
+        }
+
+        expectedValue.innerHTML = resultMessage;
+
+        // Enable the Next button after the result is shown
+        document.querySelector('.otree-btn-next').disabled = false;
+    }
+
+    function validateInput() {
+        var input = document.getElementById('validationInput').value;
+        var nextButton = document.querySelector('.otree-btn-next');
+
+        // Keep the next button disabled until spinning is complete
+        if (input === '1' && !spinInProgress && spinResult !== null) {
+            nextButton.disabled = false;
+        } else {
+            nextButton.disabled = true;
+        }
+    }
+
+    // Start the animation when the page loads
+    window.onload = function() {
+        animateRoundSelection();
+
+        // Disable the Next button initially
+        document.querySelector('.otree-btn-next').disabled = true;
+
+        // Add event listener to the input box
+        document.getElementById('validationInput').addEventListener('input', validateInput);
+
+        // Add event listener to the spin button
+        document.getElementById('spinButton').addEventListener('click', spinWheel);
+    };
+</script>
+{% endblock %}

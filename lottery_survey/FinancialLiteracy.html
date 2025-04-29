@@ -1,0 +1,35 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Financial Literacy
+{% endblock %}
+
+{% block content %}
+
+<ol>
+    <li class="mb-3">
+   Suppose you had $100 in a savings account and the interest rate was 2% per year. After 5 years, how much would you have in the account if you left the money to grow?
+        {{ form.q_interest_rates }}
+    </li>
+
+    <li class="mb-3">
+
+ Imagine that the interest rate on your savings account is 1% per year and inflation is 2% per year. After one year, would you be able to buy:
+
+  {{ form.q_inflation }}
+    </li>
+
+    <li class="mb-3">
+Is the following statement true or false? "Buying a single company’s stock usually provides a safer return than a stock mutual fund.
+           {{ form.q_risk_diversification }}
+    </li>
+
+    <li class="mb-3">
+Suppose you buy a lottery ticket that has a 1% chance of winning $100. What is the expected value of the ticket?
+        {{ form.q_probability }}
+    </li>
+</ol>
+{% next_button %}
+
+{% endblock %}

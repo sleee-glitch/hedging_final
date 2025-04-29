@@ -1,0 +1,152 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Example
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Section 1: Two Possibilities -->
+    <h4>Two Possibilities</h4>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12">
+            <div class="row justify-content-center">
+                <div class="col-md-7 text-center">
+                    <img src="{% static 'images/probability.png' %}"
+                         alt="Probability Chart"
+                         class="img-fluid"
+                         style="max-height: 300px;">
+                </div>
+            </div>
+
+            <ul style="font-size: 1.25rem; line-height: 1.5;">
+                <li><strong>Possibility A</strong> occurs with an 80 out of 100 chance (80%).</li>
+                <li><strong>Possibility B</strong> occurs with a 20 out of 100 chance (20%).</li>
+              <li> You only know the chances of two possibilities by the time you make decision.</li>
+                <li> When your final earnings are determined, only one possibility will occur with respective chances.  </li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Section 2: Two Investment Options -->
+    <h3>Two Investment Options</h3>
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12">
+
+                <div class="row justify-content-center">
+                    <div class="col-6 text-center">
+                        <img src="{% static 'images/investment1.png' %}"
+                             alt="Investment 1"
+                             class="img-fluid"
+                             style="max-width: 100%; height: auto; max-height: 300px;">
+                    </div>
+                    <div class="col-6 text-center">
+                        <img src="{% static 'images/investment2.png' %}"
+                             alt="Investment 2"
+                             class="img-fluid"
+                             style="max-width: 100%; height: auto; max-height: 300px;">
+                    </div>
+                </div>
+
+                <ul style="font-size: 1.25rem; line-height: 1.5;">
+                <li>Under each Possibility, these two investments have opposite outcomes. When one investment yields a loss, the other yields a gain.</li>
+                    <li>If Possibility A happens, Investment 1 results in -3, while Investment 2 yields 5.</li>
+                    <li>If Possibility B happens, Investment 1 provides a return of 2, while Investment 2 yields -5.</li>
+                </ul>
+            </div>
+        </div>
+
+    <hr>
+
+    <!-- Section 3: Your Potential Outcome -->
+    <h3>Your Potential Outcome</h3>
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12">
+            <ul style="font-size: 1.25rem; line-height: 1.5;">
+                <li> Both which possibility end up occuring, and how much money you put in Investment 1 and in Investment 2 determines your potential outcome.</li>
+                <li>The graph below shows outcomes for the two possibilities in a given investment round.</li>
+                <li>In the study, the graph is interactive and changes as you allocate money between Investment 1 and Investment 2.</li>
+                <li>The chances of Possibility A and B are not incorporated in this graph.</li>
+            </ul>
+
+            <div class="row justify-content-center">
+                <div class="col-md-7 text-center">
+                    <img src="{% static 'images/potentialoutcome.png' %}"
+                         alt="Potential Outcome Chart"
+                         class="img-fluid"
+                         style="max-height: 300px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Payment Information -->
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-12">
+            {% next_button %}
+        </div>
+    </div>
+</div>
+
+<style>
+    canvas {
+        max-width: 20%;
+        height: auto !important;
+    }
+
+    .form-control {
+        width: 20%;
+    }
+
+    hr {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<script>
+function updateAlphaFromSlider(value) {
+    // Reverse the value (1 - value) to make slider work in opposite direction
+    const reversedValue = (1 - parseFloat(value) + 0.01).toFixed(2);
+    // Update the form control input with the reversed value
+    document.getElementById('alpha_input').value = reversedValue;
+    // Update the hidden input
+    document.getElementById('id_alpha').value = reversedValue;
+}
+
+function validateAlpha() {
+    const input = document.getElementById('alpha_input');
+    const value = parseFloat(input.value);
+    const errorMessage = document.getElementById('error_message');
+
+    if (isNaN(value) || value < 0.01 || value > 1) {
+        errorMessage.textContent = 'Please enter a value between 0.01 and 1';
+        errorMessage.style.display = 'block';
+        return false;
+    }
+
+    errorMessage.style.display = 'none';
+    // Reverse the value for the slider
+    document.getElementById('alpha_slider').value = (1 - value + 0.01).toFixed(2);
+    document.getElementById('id_alpha').value = value;
+    return true;
+}
+
+// Initialize with a default value when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const defaultValue = 0.5;
+    document.getElementById('alpha_slider').value = 1 - defaultValue + 0.01;
+    document.getElementById('alpha_input').value = defaultValue;
+    document.getElementById('id_alpha').value = defaultValue;
+});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% block title %} Your payment: {% endblock %}
+{% block content %}
+    <div class="container">
+
+        <ul style="font-size: 1.25rem; line-height: 1.5;">
+<li>You will initially start with <strong>$18</strong>.</li>
+<li>Your investment decisions will impact your final earnings.</li>
+<li>Each investment outcome can yield a <strong>gain</strong> (you earn extra money) or a <strong>loss</strong> (you lose money).</li>
+
+<li style="text-decoration: underline;">Even in the case of losses, your total earnings will not fall below $0.</li>
+
+            <li> You have to allocate your money according to your true preferences in each case.</li>
+        </ul>
+
+        {% next_button %}
+    </div>
+{% endblock %}

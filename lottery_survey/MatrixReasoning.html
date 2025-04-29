@@ -1,0 +1,54 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+Matrix Reasoning
+{% endblock %}
+
+{% block content %}
+
+<p>Please answer the following questions to the best of your ability. For each question, select the option that you think best completes the pattern.</p>
+1.
+<div class="mb-3">
+  <img src="{% static 'images/7.gif' %}" alt="Matrix B09" class="img-fluid mb-2">
+    {% formfield player.Matrix_B09 %}
+</div>
+2.
+<div class="mb-3">
+    <img src="{% static 'images/11.gif' %}" alt="Matrix B11" class="img-fluid mb-2">
+    {% formfield player.Matrix_B11 %}
+</div>
+3.
+<div class="mb-3">
+    <img src="{% static 'images/15.gif' %}" alt="Matrix C02" class="img-fluid mb-2">
+    {% formfield player.Matrix_C02 %}
+</div>
+4.
+<div class="mb-3">
+    <img src="{% static 'images/19.gif' %}" alt="Matrix C05" class="img-fluid mb-2">
+    {% formfield player.Matrix_C05 %}
+</div>
+5.
+<div class="mb-3">
+    <img src="{% static 'images/23.gif' %}" alt="Matrix C12" class="img-fluid mb-2">
+    {% formfield player.Matrix_C12 %}
+</div>
+6.
+<div class="mb-3">
+    <img src="{% static 'images/27.gif' %}" alt="Matrix D05" class="img-fluid mb-2">
+    {% formfield player.Matrix_D05 %}
+</div>
+7.
+<div class="mb-3">
+    <img src="{% static 'images/31.gif' %}" alt="Matrix D07" class="img-fluid mb-2">
+    {% formfield player.Matrix_D07 %}
+</div>
+8.
+<div class="mb-3">
+    <img src="{% static 'images/35.gif' %}" alt="Matrix E07" class="img-fluid mb-2">
+    {% formfield player.Matrix_E07 %}
+</div>
+
+{% next_button %}
+
+{% endblock %}

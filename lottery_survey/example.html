@@ -1,0 +1,49 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+{% block title %}
+    Example 1: Two Possibilities
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Initial instructions -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12">
+<ul style="font-size: 1.25rem; line-height: 1.5;">
+
+<li> There are two Possibilities: <strong>Possibility A</strong> and <strong>Possibility B</strong>.</li>
+        <ul>
+            <li>You will not know which Possibility will occur.</li>
+            <li>In each round, <strong>you will be only told the chances of each Possibility</strong>.</li>
+            <li>Only one Possibility (either A or B) will occur based on these chances in each round.</li>
+            <li>The actual Possibility is determined <strong>after</strong> you make your allocation decision.</li>
+
+        </ul>
+ </li>
+
+<div class="container" style="max-width: 1200px; margin: 0 auto;">
+<div style="border: 2px solid #333333; padding: 15px; margin-top: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <div class="row align-items-center">
+        <div class="col-md-6 text-center mb-3 mb-md-0">
+            <img src="{% static 'images/probability2.png' %}"
+                 alt="Probability Chart"
+                 class="img-fluid"
+                 style="max-height: 280px;">
+        </div>
+        <div class="col-md-6">
+            <p><strong>In this example:</strong></p>
+                 <li> <strong>Possibility A</strong> occurs with an <strong>20 out of 100</strong> chance.</li>
+                  <li>  <strong>Possibility B</strong> occurs with a <strong>80 out of 100</strong> chance.</li>
+        </div>
+    </div>
+</div>
+</div>
+
+               <div class="col-md-6 text-right">
+        {% next_button %}
+    </div>
+
+
+
+
+
+{% endblock %}

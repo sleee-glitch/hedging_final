@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}  {% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center">
+        <h5>You have passed the comprehension check.</h5>
+        <h5>You may now proceed to the actual round.</h5>
+        <h5>Remember, each round is independent and different.</h5>
+        <h5>If you have a question, please raise your hand and a lab assistant will come.</h5>
+        <h5>Click "Next" when you are ready to begin.</h5>
+
+        <div class="mt-4">
+            {% next_button %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

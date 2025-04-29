@@ -1,0 +1,40 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+    Your final earnings
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Initial instructions -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12">
+            <ul style="font-size: 1.25rem; line-height: 1.5;">
+          <li> You will initially start with $18.</li>
+            <li> Your final earnings can go up or down based on the choices you make. </li>
+            <li> Even in the case of a loss, your overall earnings cannot be less than 0.</li>
+             <li>At the final stage, your earnings are determined based on your decision.</li>
+             <li>For each investment decision, only one possibility (either A or B) will occur based on their respective chances.</li>
+                <li> Then, your earnings are calculated using this formula:
+                        <div class="alert alert-info">
+                            <strong>Final Earnings = Your Allocation on Investment 1 × (Investment 1 outcome) + (Your Allocation on Investment 2) × (Investment 2 outcome)</strong>
+                        </div>
+                    </li>
+                </ul>
+
+
+
+
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            {% next_button %}
+        </div>
+    </div>
+</div>
+{% endblock %}

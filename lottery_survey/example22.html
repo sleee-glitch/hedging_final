@@ -1,0 +1,61 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+   Example 3: Your potential outcome
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Initial instructions -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-12">
+<ul style="font-size: 1.25rem; line-height: 1.5;">
+                <li>Your potential outcome depends on how much money you invest in Investment 1 and Investment 2.</li>
+                <li>The graph below shows potential outcomes of your decision under the two <strong>Possibilities.</strong></li>
+                <li> In the study, the graph will be interactive and will change as you adjust your allocation. </li>
+                <li> Your final outcome will depend on whether <strong> Possibility A</strong> or <strong>Possibility B</strong> occurs.</li>
+                <li>You should consider both the chances (as shown in the pie chart) and the outcomes (as shown in this bar graph) when making your allocation decision in each round.</li>
+            </ul>
+
+<div style="border: 2px solid black; padding: 10px; margin-top: 10px; border-radius: 5px;">
+
+<ul class="row justify-content-center">
+<div class="row">
+    <div class="col-6 text-center">
+        <h5 class="graph-title">Chance of Each Possibility</h5>
+        <img src="{% static 'images/probability2.png' %}"
+             alt="Investment 1"
+             class="img-fluid"
+             style="max-width: 100%; height: auto; max-height: 220px;">
+    </div>
+    <div class="col-6 text-center">
+        <h5 class="graph-title">Potential Outcome Based on Your Choice</h5>
+        <img src="{% static 'images/potentialoutcome2.png' %}"
+             alt="Investment 2"
+             class="img-fluid"
+             style="max-width: 100%; height: auto; max-height: 220px;">
+    </div>
+</div>
+
+<style>
+    .graph-title {
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #333;
+    }
+</style>
+<ul style="font-size: 1.25rem; line-height: 1.5;">
+<li> In this example: in 20 out of 100 cases, your decision will earn you $3.56. But in 80 out of 100 cases, your decision will incur a loss of $3.74. </li>
+</ul>
+</div>
+<div class="row justify-content-left mt-4">
+    <div class="col-md-12 text-left">
+        {% next_button %}
+    </div>
+</div>
+
+
+{% endblock %}
+
+
